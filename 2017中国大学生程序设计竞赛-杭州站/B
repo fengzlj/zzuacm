@@ -1,0 +1,41 @@
+//B
+# include <bits/stdc++.h>
+using namespace std;
+
+typedef long long LL;
+const LL mod=998244353;
+LL quick_pow(LL a,LL b,LL n)
+{
+	LL ret=1;
+	while(b)
+	{
+		if(b&1) ret=ret*a%n;
+		a=a*a%n;
+		b=b/2;
+	}
+	return ret%n;
+}
+int main()
+{
+	int T;
+	scanf("%d",&T);
+	
+	while(T--){
+		int m;
+		scanf("%d",&m);
+		LL ans=1;
+		for(int i=1;i<=m;i++){
+			LL p,q;
+			LL cnt=1;
+			scanf("%lld %lld",&p,&q);
+			cnt=(((p%mod+((p%mod)*(q%mod))%mod)%mod-q+mod)%mod)%mod;
+			//cout<<cnt<<endl;
+			//cout<<"@@@@   "<<ans%mod<<endl;
+			ans=(((ans*quick_pow(p,q-1,mod))%mod)*cnt)%mod;
+			//cout<<"@@@"<<" "<<(quick_pow(p,q-1,mod)%mod)<<" "<<cnt%mod<<endl;
+		}
+		printf("%d\n",ans);
+	}
+	
+	return 0;
+}
