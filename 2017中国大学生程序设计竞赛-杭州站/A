@@ -1,1 +1,39 @@
+//A
+#include<iostream>
+#include<string>
+#include<cstring>
+using namespace std;
+int n;
+int c1[200],c2[200];
+int main()
+{
+cin>>n;
+string s;
+while(n--)
+{
+int cnt=0;
+int max1=0,max2=0;
+memset(c1,0,sizeof(c1));
+memset(c2,0,sizeof(c2));
+cin>>s;
+int len=s.length();
+for(int i=0;i<len;i+=2) 
+{
+c1[s[i]]++;
+if(c1[s[i]]>max1) {
+max1=c1[s[i]];
+}
+}
+for(int i=1;i<len;i+=2) 
+{
+c2[s[i]]++;
+if(c2[s[i]]>max2) {
+max2=c2[s[i]];
+}
+}
 
+cout<<len-max1-max2<<endl;
+
+}
+return 0;
+}
