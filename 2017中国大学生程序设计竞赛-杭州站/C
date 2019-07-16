@@ -1,5 +1,4 @@
-
-//C
+//J
 #include <bits/stdc++.h>
 using namespace std;
 using namespace __gnu_cxx;
@@ -16,41 +15,61 @@ const long double eps = 1e-10;
 const double pi = acos(-1.0);
 inline LL read()
 {
-LL X=0,w=0; char ch=0;
-while(!isdigit(ch)) {w|=ch=='-';ch=getchar();}
-while(isdigit(ch)) X=(X<<3)+(X<<1)+(ch^48),ch=getchar();
-return w?-X:X;
+	LL X=0,w=0; char ch=0;
+	while(!isdigit(ch)) {w|=ch=='-';ch=getchar();}
+	while(isdigit(ch)) X=(X<<3)+(X<<1)+(ch^48),ch=getchar();
+	return w?-X:X;
 }
 inline void write(LL x)
 {
-if(x<0) putchar('-'),x=-x;
-if(x>9) write(x/10);
-putchar(x%10+'0');
+	if(x<0) putchar('-'),x=-x;
+	if(x>9) write(x/10);
+	putchar(x%10+'0');
 }
 //-------head------------
-const int maxn = 1e6 + 10;
+const int maxn = 1e5 + 10;
+LL pre1[maxn],pre2[maxn];
 
-int dict[maxn];
+const LL mod = 998244353;
+LL quickpow(LL x,LL y){
+	LL ans = 1;
+	while(y){
+		if(y & 1) ans = ans * x % mod;
+		x = x * x % mod;
+		y >>= 1;
+	}
+	return ans;
+}
+void init(){
+	memset(pre1,0,sizeof pre1);
+	memset(pre2,0,sizeof pre2);
+}
 int main(){
-int t = read();
-while(t--){
-int n = read(),d = read();
-int cnt = 0,flag = 0;//1:No,cheat
-for(int i = 1; i <= n; ++i){
-dict[i] = read();
-if(dict[i] == 1) cnt++;
-}
-if(d == 1){
-if(cnt % 3 == 0 && cnt == n) flag = 1;
-else flag = 0;
-}
-else{
-if((cnt == n - 1) && ((n % 3 == 1) || (n % 3 == 0))) flag = 1;
-else if((cnt == n) && (n % 3 == 1)) flag = 1;
-else flag = 0;
-}
-if(flag) printf("No\n");
-else printf("Yes\n");
-}
-return 0;
+	int t = read();
+	while(t--){
+		int n = read(),m = read();
+		init();
+		for(int i = 0; i < m; ++i){
+			int l = read(),r = read(),x = read();
+			if(x == 2){
+				pre1[l]++,pre1[r + 1]--;
+			}
+			else{
+				pre2[l]++,pre2[r + 1]--;
+			}
+		}
+		LL mmin1 = 1e9,mmin2 = 1e9;
+		for(int i = 1; i <= n; ++i){
+			pre1[i] += pre1[i - 1];
+			pre2[i] += pre2[i - 1];
+			//cout << pre1[i] << " " << pre2[i] << endl;
+			mmin1 = min(mmin1,pre1[i]);
+			mmin2 = min(mmin2,pre2[i]);
+		}
+		//cout << mmin1 << "?" << mmin2 << endl;
+		LL ans = quickpow(2,mmin1);
+		ans = ans * quickpow(3,mmin2) % mod;
+		cout << ans << endl;
+	}
+	return 0;
 }
