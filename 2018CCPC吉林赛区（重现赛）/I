@@ -1,0 +1,84 @@
+# include <bits/stdc++.h>
+using namespace std;
+
+const int MAXN=1e6+100;
+typedef long long LL;
+LL a[MAXN];
+int vis[MAXN]; 
+pair<LL,LL> b[MAXN];
+int main()
+{
+	int T;
+	int ccase=0;
+	scanf("%d",&T);
+	
+	while(T--){
+		int n,m;
+		LL ans1=0,ans2=0;
+		LL ans=0;
+		scanf("%d %d",&n,&m);
+		for(int i=1;i<=max(n,m);i++) a[i]=0,vis[i]=0,b[i].first=0,b[i].second=0;
+		for(int i=1;i<=n;i++) scanf("%lld",&a[i]);
+		for(int i=1;i<=m;i++) scanf("%lld",&b[i].first);
+		for(int i=1;i<=m;i++) scanf("%lld",&b[i].second);
+		
+		sort(a+1,a+n+1);
+		sort(b+1,b+m+1);
+		
+		int flag1=1;//判断是否是可以全部都过 
+		for(int i=n,j=m;i>=1&&j>=1;i--,j--){
+			if(a[i]<b[j].first){
+				flag1=0;
+				break;
+			}
+		}
+		
+		if(flag1){//如果可以全部都过
+			for(int i=1,j=1;i<=n&&j<=m;){//先用最小的代价处理掉防御性的小怪物 
+				if(b[j].second==0){
+					j++;
+				}else{
+					if(a[i]>b[j].first){
+						vis[i]=1;//标记用来处理防御性的小怪物 
+						i++,j++;
+					}else{
+						i++;
+					}
+				}
+			}
+			//for(int i=1;i<=n;i++) cout<<"%%%%"<<vis[i]<<endl;
+			LL sum=0,sum1=0;
+			for(int i=1;i<=n;i++){
+				if(vis[i]==0){
+					sum+=a[i];
+				}
+			} 
+			for(int i=1;i<=m;i++){
+				if(b[i].second==0){
+					sum1+=b[i].first;
+				}
+			}
+			//cout<<"@@@"<<sum<<" "<<sum1<<endl;
+			ans1=sum-sum1;
+		}
+		//如果不可以全部都过，那么就对只有攻击性的贪心 
+		int k=1;
+		LL sum2=0;
+		for(int i=n;i>=1&&k<=m;){
+			if(b[k].second==0){
+				if(a[i]>b[k].first){
+					sum2+=(a[i]-b[k].first);
+					i--;
+				}else{
+					break;
+				}
+			}
+			k++;	
+		}
+		ans2=sum2;
+		ans=max(ans1,ans2);
+		//cout<<"@@@"<<ans1<<" "<<ans2<<endl;
+		printf("Case %d: %lld\n",++ccase,ans);
+	}
+	return 0;
+}
