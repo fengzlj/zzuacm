@@ -1,0 +1,17 @@
+const int mod = 2;
+int main(){
+    int t = read();
+    int k = 0;
+    while(t--){
+        LL n = read();
+        LL ans = 0;
+        for(LL l=1,r;l <= n; l = r + 1){
+            r = n / (n / l);
+            ans = (ans + (r - l + 1) * (n / l)) % mod;
+        }
+        printf("Case %d: ",++k);
+        if(ans) printf("odd\n");
+        else    printf("even\n");
+    }
+    return 0;
+}
