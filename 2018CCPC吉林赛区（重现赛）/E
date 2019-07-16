@@ -1,0 +1,53 @@
+# include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+	int T;
+	int ccase=0;
+	scanf("%d",&T);
+	
+	while(T--){
+		double r,h;
+		double a,b,c;
+		double x0,y0,z0,vx,vy,vz;
+		double ans1=0.0,ans2=0.0,ans=1e18;
+		
+		scanf("%lf %lf",&r,&h);
+		scanf("%lf %lf %lf",&x0,&y0,&z0);
+		scanf("%lf %lf %lf",&vx,&vy,&vz);
+		
+		a=h*h*vx*vx+h*h*vy*vy-vz*vz*r*r;
+		b=2*h*r*r*vz+2*h*h*x0*vx+2*h*h*y0*vy-2*z0*vz*r*r;
+		c=-(h*h*(r*r-x0*x0-y0*y0)+r*r*z0*z0-2*h*r*r*z0);
+		
+		//cout<<"@@@@"<<a<<" "<<b<<" "<<c<<endl;
+		ans1=(-b+sqrt(b*b-4*a*c))/(2.0*a);
+		ans2=(-b-sqrt(b*b-4*a*c))/(2.0*a);
+		
+		//cout<<"####"<<ans1<<" "<<ans2<<endl;
+		if(ans1>0){
+			double tz=z0+ans1*vz;
+			if(tz>=0&&tz<=h){
+				ans=min(ans1,ans);
+			}
+		}
+		
+		if(ans2>0){
+			double tz=z0+ans2*vz;
+			if(tz>=0&&tz<=h){
+				ans=min(ans2,ans);
+			}
+		}
+		
+		double t=-z0/vz;
+		double tx=x0+vx*t,ty=y0+vy*t;
+		if((tx*tx+ty*ty)<=r*r){
+			ans=min(ans,t);
+		}
+		
+		printf("Case %d: %.10f\n",++ccase,ans);
+	}
+	
+	return 0;
+ } 
