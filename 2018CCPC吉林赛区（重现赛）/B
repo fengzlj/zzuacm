@@ -1,0 +1,62 @@
+# include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+	int T;
+	scanf("%d",&T);
+	
+	for(int i=1;i<=T;i++){
+		int h;
+		string a;
+		string m;
+		string d;
+		string s1,s2;
+		cin>>h;
+		getchar();
+		cin>>m;
+		cin>>a;
+		if(a=="PM"){
+			if(h!=12) h=h+12;
+		} 
+		if(a=="AM"){
+			if(h==12) h=h-12;
+		}
+		cin>>s1;
+		cin>>s2;
+		int utc;
+		if(s1=="Beijing") utc=h-8;
+		if(s1=="Washington") utc=h+5;
+		if(s1=="London") utc=h;
+		if(s1=="Moscow") utc=h-3;
+		
+		if(s2=="Beijing") h=utc+8;
+		if(s2=="Washington") h=utc-5;
+		if(s2=="London") h=utc;
+		if(s2=="Moscow") h=utc+3;
+		
+		if(h<0){
+			h=h+24;
+			d="Yesterday";
+		}else if(h>=24){
+			h=h-24;
+			d="Tomorrow";
+		}else{
+			d="Today";
+		}
+		
+		
+		if(h>=12&&h<24){
+			if(h!=12) h=h-12;
+			a="PM";
+		}else if(h==0){
+			h=12;
+			a="AM";
+		}else{
+			a="AM";
+		}
+		cout<<"Case "<<i<<": "<<d<<" "<<h<<":"<<m<<" "<<a<<endl;
+	}
+
+	return 0;
+}
