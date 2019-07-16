@@ -1,0 +1,59 @@
+const int maxn = 1e5 + 10;
+bool vis[maxn];
+int dp[maxn];
+vector<int> dict[maxn];
+inline void init(){
+    memset(vis,0,sizeof vis);
+    memset(dp,0,sizeof dp);
+    for(int i = 0; i < maxn; ++i)
+        dict[i].clear();
+}
+
+
+int main(){
+    int t = read();
+    int k = 0;
+    while(t--){
+        int n = read();
+        init();
+        LL tt;
+        for(int i = 1; i <= n; ++i){
+            tt = read();
+            if(tt < maxn){
+                dp[tt]++;
+                dict[tt].push_back(i);
+            }
+        }
+        printf("Case %d: ",++k);
+
+        for(int i = maxn - 1; i >= 2; --i){
+            dp[i - 1] += dp[i] / 2;
+        }
+        if(dp[1] < 2){
+            printf("NO\n");
+            continue;
+        }
+
+        LL sum = 1;
+        for(int i = 1; i <= n; ++i,sum <<= 1){
+            if(sum <= dict[i].size()){
+                for(int j = 0; j < sum; ++j){
+                    vis[dict[i][j]] = 1;
+                }
+                break;
+            }
+            else{
+                for(int j = 0; j < dict[i].size(); ++j){
+                    vis[dict[i][j]] = 1;
+                }
+                sum -= dict[i].size();
+            }
+        }
+        printf("YES\n");
+        for(int i = 1; i <= n; ++i){
+            printf("%d",vis[i] ? 1 : 0);
+        }
+        printf("\n");
+    }
+    return 0;
+}
