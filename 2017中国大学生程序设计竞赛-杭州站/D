@@ -1,0 +1,88 @@
+//D
+#include <bits/stdc++.h>
+using namespace std;
+using namespace __gnu_cxx;
+
+
+#define IOC std::ios::sync_with_stdio(false)
+typedef long long LL;
+typedef unsigned long long uLL;
+typedef unsigned int uit;
+typedef long double LD;
+typedef pair<int,int> pii;
+const int INF = 0x3f3f3f3f;
+const long double eps = 1e-10;
+const double pi = acos(-1.0);
+inline LL read()
+{
+LL X=0,w=0; char ch=0;
+while(!isdigit(ch)) {w|=ch=='-';ch=getchar();}
+while(isdigit(ch)) X=(X<<3)+(X<<1)+(ch^48),ch=getchar();
+return w?-X:X;
+}
+inline void write(LL x)
+{
+if(x<0) putchar('-'),x=-x;
+if(x>9) write(x/10);
+putchar(x%10+'0');
+}
+//-------head------------
+const int maxn = 1e5 + 10;
+const LL mod = 998244353;
+
+LL inv[maxn],fact[maxn],pre[maxn];
+
+inline LL quickpow(LL x,LL y){
+LL ans = 1;
+while(y){
+if(y & 1) ans = ans * x % mod;
+x = x * x % mod;
+y >>= 1;
+}
+return ans;
+}
+inline void expow(LL b,LL p,LL &a,LL &k ) {
+if(p == 0) {
+a = 1; k = 0;
+return;
+}
+expow( p, b % p, k, a );
+k -= b / p * a;
+return;
+}
+LL exinv(LL b,LL p ) {
+LL a,k;
+expow(b,p,a,k);
+if(a < 0) a += p;
+return a;
+}
+LL dict[maxn];
+int main(){
+LL n = 1e5 + 3;
+fact[0] = 1;
+for(LL i = 1; i <= n; ++i){
+fact[i] = fact[i-1] * i % mod;
+}
+inv[n] = exinv(fact[n],mod);
+for(int i = n - 1; i >= 0; --i){
+inv[i] = inv[i + 1] * (i + 1) % mod;
+}
+pre[0] = pre[1] = 1;
+for(int i = 2; i <= n; i++ )
+pre[i] = (mod - mod / i) * pre[mod % i] % mod;
+
+int t = read();
+while(t--){
+int n = read();
+LL ans = 0,tmp = 0;
+for(int i = 1; i <= n; ++i) dict[i] = read();
+for(int i = 1; i <= n; ++i){
+tmp = (tmp + fact[n - 1] * pre[i - 1] % mod) % mod;
+ans = (ans + tmp * dict[i] % mod) % mod;
+}
+ans = ans * inv[n] % mod;
+printf("%lld\n",ans);
+}
+return 0;
+}
+
